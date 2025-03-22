@@ -1,0 +1,69 @@
+<html>
+<meta charset="utf-8"/>
+<style> 
+    body {
+        margin: 0;
+        background-color: #000;
+    }
+</style>
+<body>
+<script src="three.min.js"></script>
+<script src="TrackballControls.js"></script>
+
+<script>
+ 
+
+
+init();
+animate();
+  
+function init() {
+
+    console.log(THREE.REVISION);
+    
+    let width = window.innerWidth; //960;
+    let height = window.innerHeight; //540;
+
+    scene = new THREE.Scene();
+  
+    camera = new THREE.PerspectiveCamera( 45, width/height, 1, 10000 ); 
+    camera.position.z = 1000;
+    //console.log("camera.postion:%o", camera.position);
+    
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5)
+    scene.add( ambientLight );
+
+    var directionalLight = new THREE.DirectionalLight( 0xffffff, 2 ); 
+    directionalLight.position.set(0,0,3000);
+    scene.add( directionalLight );
+
+    TorusGeometry = new THREE.TorusGeometry(150,80,10,20 );
+    TorusMaterial = new THREE.MeshPhongMaterial( { color: 'magenta' } );
+    TorusMesh = new THREE.Mesh( TorusGeometry, TorusMaterial );
+    scene.add( TorusMesh );
+     
+    const size = 500;
+    scene.add(new THREE.AxesHelper(size));
+     
+    renderer = new THREE.WebGLRenderer();
+    renderer.setSize( width, height );
+    renderer.setClearColor(new THREE.Color('black'));
+    document.body.appendChild( renderer.domElement );
+
+    trackball = new THREE.TrackballControls( camera, renderer.domElement );
+    trackball.rotateSpeed = 3.0;
+    trackball.zoomSpeed = 0.5;
+    trackball.panSpeed = 0.5;
+    
+}
+  
+function animate() {
+    requestAnimationFrame( animate );
+    renderer.render( scene, camera );
+    trackball.update();   
+}
+
+
+</script>
+</body>
+</html>
