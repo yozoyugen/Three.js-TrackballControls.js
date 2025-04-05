@@ -62,6 +62,7 @@
 			}; // internals
 
 			this.target = new THREE.Vector3();
+			this.center = new THREE.Vector3();
 			const EPS = 0.000001;
 			const lastPosition = new THREE.Vector3();
 			let lastZoom = 1;
@@ -84,11 +85,12 @@
 
 
 			this.target0 = this.target.clone();
+			this.center0 = this.center.clone();
 			this.position0 = this.object.position.clone();
 			this.up0 = this.object.up.clone();
 			this.zoom0 = this.object.zoom; // methods
-			//console.log("target0:%o", this.target0);
-			//console.log("position0:%o", this.position0);
+			console.log("target0:%o", this.target0);
+			console.log("position0:%o", this.position0);
 
 			this.handleResize = function () {
 
@@ -145,14 +147,16 @@
 					if ( angle ) {
 						//console.log("angle");
 
-						let offset_ = scope.target.clone();
+						//let center = new THREE.Vector3(500,0,0);
+						//let offset_ = scope.target.clone();
+						let offset_ = scope.target.clone().sub( scope.center );
 						//console.log("1::offset_:%o", offset_);
 						scope.object.position.x -= offset_.x;
 						scope.object.position.y -= offset_.y;
 						scope.object.position.z -= offset_.z;
-						scope.target.x = 0;
-						scope.target.y = 0;
-						scope.target.z = 0;
+						scope.target.x -= offset_.x; //0;
+						scope.target.y -= offset_.y; //0;
+						scope.target.z -= offset_.z; //0;
 						
 						_eye.copy( scope.object.position ).sub( scope.target );
 
@@ -400,6 +404,7 @@
 				_state = STATE.NONE;
 				_keyState = STATE.NONE;
 				scope.target.copy( scope.target0 );
+				scope.center.copy( scope.center0 );
 				scope.object.position.copy( scope.position0 );
 				scope.object.up.copy( scope.up0 );
 				scope.object.zoom = scope.zoom0;
